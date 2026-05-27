@@ -1,14 +1,4 @@
 {
-  "builds": [
-    {
-      "src": "api/*.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "api/index.py"
-    }
-  ]
+  "buildCommand": "pip install -r requirements.txt",
+  "devCommand": "python api/index.py"
 }
