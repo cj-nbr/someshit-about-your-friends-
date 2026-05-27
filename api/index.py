@@ -672,8 +672,15 @@ def index():
 @app.route('/api/getlines', methods=['GET'])
 def get_lines():
     try:
+        name = request.args.get('name', 'Friend')
+        # Capitalize the name properly
+        name = name.strip().capitalize()
+        
         lines = random.sample(FUNNY_LINES, 3)
-        return jsonify({'lines': lines})
+        # Replace {name} placeholder with actual name
+        personalized_lines = [line.replace('{name}', name) for line in lines]
+        
+        return jsonify({'lines': personalized_lines})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
