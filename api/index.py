@@ -4,37 +4,80 @@ import random
 app = Flask(__name__)
 
 FUNNY_LINES = [
-    "You're so funny, even your browser laughs at your jokes!",
-    "Your sense of humor is out of this world... literally, Mars rejected it.",
-    "You're hilarious! Comedy clubs are now officially obsolete.",
-    "Your jokes are so bad, they need a laugh track from a different dimension.",
-    "You're basically a walking meme, and honestly, we're here for it!",
-    "Your comedy skills: 10/10. Your timing: still loading...",
-    "You've got jokes sharper than a cactus in a porcupine convention!",
-    "If laughter is the best medicine, you're basically a pharmaceutical company.",
-    "Your jokes are like WiFi - sometimes they don't reach everyone, but when they do, it's magic!",
-    "You're so funny, even your shadow cracks up!",
-    "Comedy gold right here! Now if only we could mine it...",
-    "You walk into a room and the vibe changes from 'meh' to 'HYPE'!",
-    "Your humor is so advanced, we're still decoding it in 2026.",
-    "If funny was a job, you'd be CEO of Laugh Inc.",
-    "You're the human equivalent of a perfectly timed meme.",
-    "Your jokes hit harder than my existential dread on Monday mornings!",
-    "You're so witty, even Sarcasm took notes from you.",
-    "Your comedy is so smooth, butter companies are taking notes.",
-    "If we ranked comedians, you'd break the scale!",
-    "You just turned my frown upside down... and then sideways... I'm confused now!",
-    "Your sense of humor is like a fine wine... confusing at first, then brilliantly intoxicating!",
-    "You're the kind of funny that makes people snort-laugh in public and regret it!",
-    "If your jokes were a movie, they'd be box office gold!",
-    "Your comedic timing is *chef's kiss*... if chefs knew how to laugh!",
-    "You're hilariously relatable - it's like you're inside my head... creepy but hilarious!",
-    "Your jokes are so clever, they need a PhD to fully appreciate them!",
-    "You're basically a human emoji 😂 in the best way possible!",
-    "If funny was currency, you'd be a billionaire right now!",
-    "Your humor is universally understood - even aliens would get your jokes!",
-    "You're the reason laughter therapy is a real thing!"
+    "Tere jaisa funny hoon toh main bhi cinema band kar dunga!",
+    "Teri comedy itni out of world hai jaise Mars par rehearsal karta hai!",
+    "Tere jokes itne bade hain jaise comedy clubs ne surrender kar diya!",
+    "Tere jokes itne bade hain jaise parallel universe se dimension diye ho!",
+    "Tu to walking meme hai, genuinely honest opinion!",
+    "Comedy skills: 10/10, timing: server se connect hi nahi hota!",
+    "Tere jokes itne sharp hain jaise cactus convention mein porcupine hoon!",
+    "Agar funny hona job hota to tu CEO ho jaata pharmaceutical wali comedy factory ka!",
+    "Tere WiFi jaise jokes hain - kabhi milte ho kabhi nahi, jab milte ho to pure ghar ko signal!",
+    "Tu itna funny hai jaise teri shadow bhi tere ko laugh kar rahi hai!",
+    "Tere comedy ka gold itna heavy hai ki mining company interested hai!",
+    "Tu room mein entry deta hai to vibe 'meh' se 'HYPE' ho jaata hai!",
+    "Teri humor itni advanced hai 2026 mein bhi decode nahi ho raha!",
+    "Agar funny ek job hota to tu CEO of Laugh Inc. ho jaata!",
+    "Tu literally perfectly timed meme hai real life mein!",
+    "Teri jokes mere Monday ke depression ko bhi hard hit deti hain!",
+    "Tu itna witty hai jaise Sarcasm ne tujhe notes liye hain!",
+    "Tere comedy itna smooth hai jaise butter companies tere se seekh rahe hain!",
+    "Comedians ko ranked karo toh tu scale break kar deta hai!",
+    "Teri smile se frown upar hota hai, phir sideways, phir completely confused hoon!",
+    "Tere humor wine ki tarah hai - pehle confusing, phir intoxicating!",
+    "Tu type ho joh public mein snort laugh kara de aur baad mein regret kare!",
+    "Agar teri jokes movie hote to box office par line lag jaate!",
+    "Tere comedic timing itni perfect hai jaise chef ka kiss par timing hain!",
+    "Tu relatable itna ho jaise mere dimaag mein directly connected hai!",
+    "Tere jokes itne clever hain jaise PhD karte ho un ko samajhne ke liye!",
+    "Tu literally human emoji ho 😂 best way possible mein!",
+    "Agar funny currency hota to tu billionaire ho jaata right now!",
+    "Tere humor itna universal hai jaise aliens bhi samajh jayenge!",
+    "Tu hi reason hai joh laughter therapy real thing bani!",
+    "Tere face pe itna oil hai, BP wale padhare hain!",
+    "Teri height dekh ke chhote log bhi tall feel hote hain!",
+    "Teri age teri secret hai, koi bhi real number nahi janta!",
+    "Tere beauty routine mein itne products hain ki perfume se confusion hota hai!",
+    "Hair loss ke side effects main tu exhibit A hai!",
+    "Teri weight to fluctuate hota hai gym membership ke sath!",
+    "Face massage se bhi tera face massage nahi ho raha, god's massage zaroori hai!",
+    "Tere pimples itne bade hain ki Google Maps pe mark ho gaye hain!",
+    "Age wise padhana band kar, mirror face par likha hai sab!",
+    "Tere skin tone kabhi pata nahi chalta next kaun sa color aayega!",
+    "Tere dark circles itne bade hain jaise puri raat awara ghum rahe ho!",
+    "Height measurement mein teri zaroorat nahi, floor se distance dekh lo!",
+    "Tera smile itna fake hai jaise cosmetic surgery reject kar gaya!",
+    "Belly ko dekh kar gym equipment jealousy karta hai!",
+    "Tera face itna asymmetrical hai jaise architects reference lein!",
+    "Tere cheeks se blush apply karna seekho!",
+    "Age group mein ghumte ho jaise 'options' search kar rahe ho!",
+    "Teri back posture dekh ke camels ko confidence aa gaya!",
+    "Face pe spots itne hain jaise constellation map banaya hai!",
+    "Hair style se lagta hai barber ko daily challenge deta ho!",
+    "Tere nails itne bade hain jaise claws grow karke arrange kar diye!",
+    "Voice so deep, bass speakers jealous hain!",
+    "Tere ears itne bade hain jaise parabolic antenna laga diye hain!",
+    "Forehead pe likha hai success, but reality pe likha hai struggle!",
+    "Nose ka size such that GPS nahi chahiye, tu landmark hai!",
+    "Teeth itne crooked hain jaise rollercoaster ka track banaya hai!",
+    "Age-wise vintage, condition-wise used and damaged goods!",
+    "Tere skin par weather forecast likha hai dry, oily, combination sab!",
+    "Height itni less hai jaise ground par download ho gaye ho!",
+    "Body shape circle lagta hai, pi bhi calculate nahi kar sakta!",
+    "Tere fashion sense dekh ke lagta hai color blind ho tum!",
+    "Walks itna heavy jaise underground shake hota hai!",
+    "Style statement: 'Effort karna chhod chuka hoon!'",
+    "Glow-up ka waiting room mein tu seat hi nahi paayega!",
+    "Face ka angle jo bhi camera se lao, same tragic result!",
+    "Tere makeup itna heavy hai jiske bina tourist attraction ban jaate ho!",
+    "Age ko teri face par 3D tattoo kara diya hai!",
+    "Height mein teri growth ruki hai, brain ko bhi inform kar!",
+    "Tere hote hue mirror ko therapy ki zaroorat padti hai!",
+    "Fitness journey dekh ke trainer ne resignation letter de di!",
+    "Teri photos dekh ke Instagram algorithm confused hota hai!",
+    "Selfie camera se tu mirror selfie lagta hai!",
 ]
+
 
 HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
@@ -456,11 +499,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <div class="glow-sphere glow-3"></div>
 
     <div class="container">
-        <h1>✨ Friend Roaster</h1>
+        <h1>✨ Hi Friend Let Me Roast YOU </h1>
         <p class="subtitle">Get personalized funny lines about your comedy genius</p>
 
         <div class="input-group">
-            <label for="nameInput">Enter Your Name:</label>
+            <label for="nameInput">Type Your Name:</label>
             <input 
                 type="text" 
                 id="nameInput" 
@@ -470,7 +513,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         </div>
 
         <div class="button-group">
-            <button class="btn-submit" id="submitBtn">Generate Comedy Gold</button>
+            <button class="btn-submit" id="submitBtn">Enter</button>
             <button class="btn-clear" id="clearBtn">Clear</button>
         </div>
 
@@ -483,7 +526,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         <div class="results-section" id="resultsSection">
             <div class="greeting" id="greeting"></div>
-            <div class="result-title">Your Comedy Lines</div>
+            <div class="result-title">Your AI Roast</div>
             <div class="funny-lines" id="funnyLinesContainer"></div>
         </div>
     </div>
@@ -555,7 +598,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
                 const displayName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
-                greeting.innerHTML = `Hey <span class="name">${displayName}</span>, check out these comedy lines about you! 😂`;
+                greeting.innerHTML = `Hey <span class="name">${displayName}</span>, sorry if u feel bad cause i don't care I'M an AI! 😂`;
 
                 funnyLinesContainer.innerHTML = '';
                 data.lines.forEach(line => {
