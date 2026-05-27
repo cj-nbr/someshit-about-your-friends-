@@ -1,7 +1,50 @@
-from flask import Flask
+from flask import Flask, jsonify, send_file
+import random
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../public', static_url_path='')
 
-@app.route("/")
-def home():
-    return "hiiiii"
+FUNNY_LINES = [
+    "You're so funny, even your browser laughs at your jokes!",
+    "Your sense of humor is out of this world... literally, Mars rejected it.",
+    "You're hilarious! Comedy clubs are now officially obsolete.",
+    "Your jokes are so bad, they need a laugh track from a different dimension.",
+    "You're basically a walking meme, and honestly, we're here for it!",
+    "Your comedy skills: 10/10. Your timing: still loading...",
+    "You've got jokes sharper than a cactus in a porcupine convention!",
+    "If laughter is the best medicine, you're basically a pharmaceutical company.",
+    "Your jokes are like WiFi - sometimes they don't reach everyone, but when they do, it's magic!",
+    "You're so funny, even your shadow cracks up!",
+    "Comedy gold right here! Now if only we could mine it...",
+    "You walk into a room and the vibe changes from 'meh' to 'HYPE'!",
+    "Your humor is so advanced, we're still decoding it in 2026.",
+    "If funny was a job, you'd be CEO of Laugh Inc.",
+    "You're the human equivalent of a perfectly timed meme.",
+    "Your jokes hit harder than my existential dread on Monday mornings!",
+    "You're so witty, even Sarcasm took notes from you.",
+    "Your comedy is so smooth, butter companies are taking notes.",
+    "If we ranked comedians, you'd break the scale!",
+    "You just turned my frown upside down... and then sideways... I'm confused now!",
+    "Your sense of humor is like a fine wine... confusing at first, then brilliantly intoxicating!",
+    "You're the kind of funny that makes people snort-laugh in public and regret it!",
+    "If your jokes were a movie, they'd be box office gold!",
+    "Your comedic timing is *chef's kiss*... if chefs knew how to laugh!",
+    "You're hilariously relatable - it's like you're inside my head... creepy but hilarious!",
+    "Your jokes are so clever, they need a PhD to fully appreciate them!",
+    "You're basically a human emoji 😂 in the best way possible!",
+    "If funny was currency, you'd be a billionaire right now!",
+    "Your humor is universally understood - even aliens would get your jokes!",
+    "You're the reason laughter therapy is a real thing!"
+]
+
+@app.route('/')
+def index():
+    return send_file('../public/index.html')
+
+@app.route('/api/getlines', methods=['GET'])
+def get_lines():
+    lines = random.sample(FUNNY_LINES, 3)
+    return jsonify({'lines': lines})
+
+if __name__ == '__main__':
+    app.run(debug=True)
