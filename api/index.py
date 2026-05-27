@@ -499,8 +499,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <div class="glow-sphere glow-3"></div>
 
     <div class="container">
-        <h1>✨ Hi Friend Let Me Roast YOU </h1>
-        <p class="subtitle">Get personalized funny lines about your comedy genius</p>
+        <h1>✨ Even AI Roast YOU </h1>
+        <p class="subtitle">Troll Your Loved Ones</p>
 
         <div class="input-group">
             <label for="nameInput">Type Your Name:</label>
@@ -598,7 +598,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
                 const displayName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
-                greeting.innerHTML = `Hey <span class="name">${displayName}</span>, sorry if u feel bad cause i don't care I'M an AI! 😂`;
+                greeting.innerHTML = `Hey <span class="name">${displayName}</span>, Bura Na Mano AI hu! 😂`;
 
                 funnyLinesContainer.innerHTML = '';
                 data.lines.forEach(line => {
