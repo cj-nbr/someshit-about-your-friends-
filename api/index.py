@@ -1,113 +1,81 @@
 from flask import Flask, jsonify, Response, request
 import random
-import gender_guesser.detector as gender
 
 app = Flask(__name__)
 
-MALE_ROASTS = [
-    "{name} bhai, tera hairstyle dekh ke barber ne bhi apology letter bhej diya!",
-    "{name}, tu itna lazy hai ki alarm bhi tujhe dekh ke snooze ho jaata hai!",
-    "Bhai {name}, tere confidence aur reality ka kabhi milan nahi hoga!",
-    "{name}, teri crush tujhe dekh ke phone silent pe daal deti hai!",
-    "{name} bhai, tera fashion sense dekh ke mannequin bhi resign kar de!",
-    "Bhai {name}, tera face unlock dekh ke phone bhi password maangta hai!",
-    "{name}, tu gym jaata hai ya sirf mirror selfies lene?",
-    "{name} bhai, tere jokes sunke log network issue pretend karte hain!",
-    "{name}, teri personality free trial jaisi hai — boring aur limited!",
-    "{name}, tere paas talent kam aur overconfidence zyada hai!",
-    "Bhai {name}, tu itna unlucky hai ki Ludo mein bhi har jaata hai!",
-    "{name}, tera haircut toh lagta hai lawn mower se hua hai!",
-    "{name} bhai, tu relationship mein bhi buffering karta hoga!",
-    "{name}, tere doston ne tujhe group photo mein crop kar diya!",
-    "{name}, tu itna fake hai ki filter bhi confuse ho jaata hai!",
-    "{name}, tera face dekh ke Google captcha bhi doubt karta hai!",
-    "Bhai {name}, tere paas attitude toh iPhone wala hai, budget Nokia wala!",
-    "{name}, teri love life error 404 hai!",
-    "{name} bhai, tu exam mein cheating bhi fail kar deta hai!",
-    "{name}, teri dressing sense dekh ke traffic cones jealous ho jaaye!",
-    "{name}, tu PUBG mein bhi bot se haar jaata hoga!",
-    "{name}, tere dance moves dekh ke DJ ne gaana band kar diya!",
-    "{name}, tu itna boring hai ki Netflix bhi skip intro kar de!",
-    "Bhai {name}, tere future ko dekh ke astrologer bhi ro diya!",
-    "{name}, tu selfie leta nahi, public warning deta hai!",
-    "{name}, teri beard bhi tujhe support nahi karti!",
-    "{name}, tu itna kanjoos hai ki calculator bhi tujhe ignore karta hai!",
-    "{name}, teri smile toothpaste ad ka anti-example hai!",
-    "Bhai {name}, tera brain airplane mode mein rehta hai!",
-    "{name}, teri crush ne tujhe 'bhai' bhi nahi bola — direct ignore kiya!",
-    "{name}, tu itna slow hai ki turtle bhi overtake kar de!",
-    "{name}, tera face dekh ke camera app crash ho gaya!",
-    "{name}, tere kapde dekh ke lagta hai donation box loot ke aaya hai!",
-    "{name}, tu itna awkward hai ki Siri bhi answer dene se mana kar de!",
-    "{name}, tere room ka mess UNESCO heritage site ban sakta hai!",
-    "{name}, teri love story trailer mein hi flop ho gayi!",
-    "{name}, tu itna gareeb hai ki dreams bhi EMI pe aate hain!",
-    "{name}, tera WiFi bhi tujhe dekh ke disconnect ho jaata hai!",
-    "{name}, tu itna useless hai ki mute button bhi tujhe ignore karta hai!",
-    "{name}, teri hairstyle dekh ke birds ne nest banana mana kar diya!",
-    "{name}, tu itna unlucky hai ki recharge ke baad bhi network nahi aata!",
-    "{name}, tere paas swag kam aur lag zyada hai!",
-    "{name}, teri body dekh ke dumbbells bhi laugh karte hain!",
-    "{name}, tu gym se zyada canteen mein active rehta hai!",
-    "{name}, tera breakup bhi probably mutual relief tha!",
-    "{name}, tu itna irritating hai ki ads bhi skip kar dein tujhe!",
-    "{name}, teri DP dekh ke Instagram dark mode mein chala gaya!",
-    "{name}, tere dance steps earthquake warning lagte hain!",
-    "{name}, tu itna broke hai ki wallet kholte hi hawa nikalti hai!",
-    "{name}, tera face reveal disaster movie se zyada dangerous tha!",
-]
-
-FEMALE_ROASTS = [
-    "{name}, tera makeup budget India ka GDP lagta hai!",
-    "{name}, teri selfies dekh ke filters bhi overwork ho gaye!",
-    "{name}, tu itna drama karti hai ki daily soap writers inspire ho jaaye!",
-    "{name}, tere mood swings stock market se zyada dangerous hain!",
-    "{name}, teri shopping list dekh ke bank account ro deta hai!",
-    "{name}, tera attitude VIP hai par reality local train!",
-    "{name}, tu itni loud hai ki mic bhi mute ho jaata hai!",
-    "{name}, teri bestie bhi tere secrets leak kar deti hogi!",
-    "{name}, tera fashion sense dekh ke rainbow bhi confused hai!",
-    "{name}, tu itni late reply karti hai ki message retirement le le!",
-    "{name}, teri crush tujhe dekh ke airplane mode laga deta hai!",
-    "{name}, tere fake tears pe Oscar bhi refuse kar de!",
-    "{name}, tera eyeliner bhi straight nahi rehta jaise tera mood!",
-    "{name}, tu itna gossip karti hai ki news channels job offer de!",
-    "{name}, tere nails weapon category mein aate hain!",
-    "{name}, tera ex abhi bhi therapy mein hoga!",
-    "{name}, tu itna overreact karti hai ki mosquitoes bhi darr jaaye!",
-    "{name}, teri shopping cart dekh ke Amazon bhi panic ho gaya!",
-    "{name}, tera makeup remove karte hi Face ID fail ho gaya!",
-    "{name}, teri squad photos mein sab filter ka kamaal hota hai!",
-    "{name}, tu itna attention maangti hai ki sun bhi jealous ho jaaye!",
-    "{name}, tera breakup quote status dekh ke Shakespeare bhi cringe kare!",
-    "{name}, tere reels dekh ke algorithm bhi confuse ho gaya!",
-    "{name}, tu itni toxic hai ki plants bhi murjha jaaye!",
-    "{name}, teri voice note sunke WhatsApp hang ho gaya!",
-    "{name}, tere tantrums dekh ke toddlers bhi inspired ho jaaye!",
-    "{name}, tera phone screen time NASA track kar raha hai!",
-    "{name}, tu itni fake laugh karti hai ki hyena bhi insult feel kare!",
-    "{name}, tere outfit choices dekh ke mirror ne resignation de diya!",
-    "{name}, tera crush tujhe sirf meme source maanta hai!",
-    "{name}, tu itna overspend karti hai ki wallet suicide kar le!",
-    "{name}, tere captions reality se zyada fictional hote hain!",
-    "{name}, tu itna confuse rehti hai ki GPS bhi lost ho jaaye!",
-    "{name}, teri friends bhi tere bina zyada khush lagti hain!",
-    "{name}, tera makeup tutorial dekh ke paint brush retire ho gaya!",
-    "{name}, tu itni dramatic hai ki thunder bhi background music lagta hai!",
-    "{name}, teri dressing sense traffic signals se inspired lagti hai!",
-    "{name}, tere crush ne tujhe close friends mein bhi add nahi kiya!",
-    "{name}, tera room dekh ke tornado bhi sharma jaaye!",
-    "{name}, tu itni lazy hai ki charger bhi tere paas rehna refuse kare!",
-    "{name}, tera confidence TikTok trend jaisa temporary hai!",
-    "{name}, tu itni over smart banti hai ki Google bhi ignore kar de!",
-    "{name}, tere ex ne freedom day celebrate kiya hoga!",
-    "{name}, tera attitude free hai phir bhi koi nahi leta!",
-    "{name}, tu itna complain karti hai ki customer care bhi block kar de!",
-    "{name}, teri beauty sleep bhi kaam nahi kar rahi!",
-    "{name}, tu itni broke hai ki shopping cart sirf wishlist ban ke reh gayi!",
-    "{name}, tere dance reels dekh ke tripod hil gaya!",
-    "{name}, teri fake smile pe emojis bhi trust nahi karte!",
-    "{name}, tera social life bas Instagram stories tak limited hai!",
+FUNNY_LINES = [
+    "{name}, tere jaisa funny hoon toh main bhi cinema band kar dunga!",
+    "{name}, teri comedy itni out of world hai jaise Mars par rehearsal karta hai!",
+    "{name} ke jokes sune hain to comedy clubs ne surrender kar diya!",
+    "{name}, jokes itne bade hain jaise parallel universe se dimension diye ho!",
+    "{name} literally walking meme hai, genuinely honest opinion!",
+    "{name}, comedy skills: 10/10, timing: server se connect hi nahi hota!",
+    "{name} ke jokes itne sharp hain jaise cactus convention mein porcupine hoon!",
+    "Agar funny hona job hota to {name} CEO ho jaata pharmaceutical comedy factory ka!",
+    "{name} ke WiFi jaise jokes hain - kabhi milte ho kabhi nahi, jab milte ho to pure ghar ko signal!",
+    "{name} itna funny hai jaise teri shadow bhi tere ko laugh kar rahi hai!",
+    "{name} ke comedy ka gold itna heavy hai ki mining company interested hai!",
+    "{name} room mein entry deta hai to vibe 'meh' se 'HYPE' ho jaata hai!",
+    "{name} ki humor itni advanced hai 2026 mein bhi decode nahi ho raha!",
+    "Agar funny ek job hota to {name} CEO of Laugh Inc. ho jaata!",
+    "{name} literally perfectly timed meme hai real life mein!",
+    "{name} ke jokes mere Monday ke depression ko bhi hard hit deti hain!",
+    "{name} itna witty hai jaise Sarcasm ne tujhe notes liye hain!",
+    "{name} ka comedy itna smooth hai jaise butter companies tere se seekh rahe hain!",
+    "Comedians ko ranked karo toh {name} scale break kar deta hai!",
+    "{name}, teri smile se frown upar hota hai, phir sideways, phir confused hoon!",
+    "{name} ki humor wine ki tarah hai - pehle confusing, phir intoxicating!",
+    "{name} type ho joh public mein snort laugh kara de aur baad mein regret kare!",
+    "Agar {name} ke jokes movie hote to box office par line lag jaate!",
+    "{name} ke comedic timing itni perfect hai jaise chef ka kiss par timing hain!",
+    "{name} relatable itna ho jaise mere dimaag mein directly connected hai!",
+    "{name} ke jokes itne clever hain jaise PhD karte ho un ko samajhne ke liye!",
+    "{name} literally human emoji ho 😂 best way possible mein!",
+    "Agar funny currency hota to {name} billionaire ho jaata right now!",
+    "{name} ki humor itna universal hai jaise aliens bhi samajh jayenge!",
+    "{name} hi reason hai joh laughter therapy real thing bani!",
+    "{name}, tere face pe itna oil hai jaise Himalaya ke tel ka storage!",
+    "{name} ki height dekh ke chhote log bhi tall feel hote hain!",
+    "{name}, teri age teri secret hai jaise government document!",
+    "{name} ke beauty routine se lagta hai Sephora mein scholarship karti ho!",
+    "{name} ke hair loss dekh ke rogaine ne hope chod di!",
+    "{name}, teri weight to fluctuate hota hai app se bhi zyada!",
+    "{name} ko face massage se bhi fayda nahi, plastic surgeon bhi resign kar du!",
+    "{name} ke pimples itne bade hain jaise 3D map par dikh rahe hain!",
+    "{name}, age wise padhana band kar, mirror face par likha hai sab kuch!",
+    "{name} ka skin tone kabhi pata nahi chalta next kaun sa color aayega!",
+    "{name} ke dark circles itne bade hain jaise Shahrukh Khan wale nahi hote!",
+    "Height measurement mein {name} ki zaroorat nahi, floor se distance dekh lo!",
+    "{name}, tera smile itna fake hai jaise Netflix ka show!",
+    "Belly ko dekh kar {name} gym equipment jealousy karta hai!",
+    "{name} ka face itna asymmetrical hai jaise Picasso ne design kiya!",
+    "{name} ke cheeks se blusher seekh sakti hai cosmetics company!",
+    "{name} age group mein ghumta hai jaise dating app par 'options' search kar rahe!",
+    "{name} ki back posture dekh ke camels ko confidence aa gaya!",
+    "{name} ke face pe spots itne hain jaise acne constellation banaya hai!",
+    "{name} ka hairstyle to barber ko daily challenge deta hai!",
+    "{name} ke nails itne bade hain jaise eagle claws hai!",
+    "{name} ki voice itni deep hai jaise underground mein rehta hai!",
+    "{name} ke ears itne bade hain jaise wifi antenna laga diye hain!",
+    "{name} ke forehead pe likha hai success, reality par likha hai struggle!",
+    "{name} ki nose ka size such that GPS nahi chahiye, tu landmark hai!",
+    "{name} ke teeth itne crooked hain jaise rollercoaster track banaya hai!",
+    "{name} age-wise vintage lagta hai, condition-wise used and damaged goods!",
+    "{name} ke skin par weather forecast likha hai - kabhi dry kabhi oily!",
+    "{name} ki height itni less hai jaise ground par download ho gaya!",
+    "{name} ka body shape circle hai, even pi calculate nahi kar sakta!",
+    "{name} ke fashion sense dekh ke lagta hai color blind hai!",
+    "{name} ke walks itne heavy hain jaise earthquake aa raha hai!",
+    "{name} ki style statement: 'Effort karna to chhod chuka hoon!'",
+    "{name} ke glow-up ka waiting room mein seat hi nahi paayega!",
+    "{name} ka face angle jo bhi hो camera se lao, same tragic result!",
+    "{name} ka makeup itna heavy hai jiske bina tourist attraction ban jaata!",
+    "{name} ke age ko face par 3D tattoo kara diya hai!",
+    "{name} ki height mein growth ruki hai, brain ko inform kar!",
+    "{name} ke hote hue mirror ko therapy ki zaroorat padti hai!",
+    "{name} ki fitness journey dekh ke trainer ne resignation letter de di!",
+    "{name} ke photos dekh ke Instagram algorithm confused hota hai!",
+    "{name} ka selfie angle se zyada scam lagta hai!",
 ]
 
 
@@ -637,7 +605,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 data.lines.forEach(line => {
                     const lineEl = document.createElement('div');
                     lineEl.className = 'line';
-                    lineEl.innerHTML = `"${line}"`;
+                    const personalizedLine = line.replace(/{name}/g, displayName);
+                    lineEl.innerHTML = `"${personalizedLine}"`;
                     funnyLinesContainer.appendChild(lineEl);
                     
                     createSparkles(lineEl);
@@ -703,15 +672,8 @@ def index():
 @app.route('/api/getlines', methods=['GET'])
 def get_lines():
     try:
-        name = request.args.get('name', 'Friend')
-        # Capitalize the name properly
-        name = name.strip().capitalize()
-        
         lines = random.sample(FUNNY_LINES, 3)
-        # Replace {name} placeholder with actual name
-        personalized_lines = [line.replace('{name}', name) for line in lines]
-        
-        return jsonify({'lines': personalized_lines})
+        return jsonify({'lines': lines})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
