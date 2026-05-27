@@ -1,8 +1,8 @@
-from flask import Flask, jsonify, send_file
+from flask import Flask, jsonify, Response
 import random
 import os
 
-app = Flask(__name__, static_folder='../public', static_url_path='')
+app = Flask(__name__)
 
 FUNNY_LINES = [
     "You're so funny, even your browser laughs at your jokes!",
@@ -37,14 +37,27 @@ FUNNY_LINES = [
     "You're the reason laughter therapy is a real thing!"
 ]
 
+def get_html():
+    """Read and return the HTML file"""
+    try:
+        html_path = os.path.join(os.path.dirname(__file__), '..', 'public', 'index.html')
+        with open(html_path, 'r', encoding='utf-8') as f:
+            return f.read()
+    except:
+        return "<h1>Error loading page</h1>"
+
 @app.route('/')
 def index():
-    return send_file('../public/index.html')
+    html_content = get_html()
+    return Response(html_content, mimetype='text/html')
 
 @app.route('/api/getlines', methods=['GET'])
 def get_lines():
-    lines = random.sample(FUNNY_LINES, 3)
-    return jsonify({'lines': lines})
+    try:
+        lines = random.sample(FUNNY_LINES, 3)
+        return jsonify({'lines': lines})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
